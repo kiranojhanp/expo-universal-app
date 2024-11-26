@@ -4,17 +4,37 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
     image: fewa-web-app:latest
+    restart: always
     ports:
       - "8081:8081"
     environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/fewa
       EXPO_PUBLIC_API_URL: http://localhost:8081
       NODE_ENV: production
       PORT: 8081
     command: ["bun", "/usr/src/app/node-server.js"]
+    depends_on:
+      - database
+    networks:
+      - fewa-internal-network
+
+  database:
+    image: postgres:latest
     restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: fewa
+    volumes:
+      - fewa_pg_data:/var/lib/postgresql/data
     networks:
       - fewa-internal-network
 
 networks:
   fewa-internal-network:
     driver: bridge
+
+volumes:
+  fewa_pg_data:
