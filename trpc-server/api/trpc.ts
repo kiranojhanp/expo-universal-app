@@ -7,10 +7,9 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 import { initTRPC, TRPCError } from "@trpc/server";
-import superjson from "superjson";
+import { transformer } from "@/trpc-utils/shared";
 import { ZodError } from "zod";
-
-const db = {};
+import { db } from "@/trpc-server/db";
 
 /**
  * 1. CONTEXT
@@ -38,7 +37,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  * transformer. Should be done only once per backend!
  */
 const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
+  transformer,
   errorFormatter: ({ shape, error }) => ({
     ...shape,
     data: {
