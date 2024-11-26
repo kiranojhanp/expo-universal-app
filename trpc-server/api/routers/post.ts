@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure } from "@/trpc-server/trpc";
+import { publicProcedure } from "@/trpc-server/api/trpc";
 
 import type { TRPCRouterRecord } from "@trpc/server";
 

@@ -3,14 +3,14 @@ import { createTRPCReact } from "@trpc/react-query";
 import { httpBatchLink, loggerLink } from "@trpc/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import type { AppRouter } from "@/trpc-server";
+import type { AppRouter } from "@/trpc-server/api";
 import { getUrl, transformer } from "./shared";
 
 /**
  * A set of typesafe hooks for consuming your API.
  */
 export const api = createTRPCReact<AppRouter>();
-export { type RouterInputs, type RouterOutputs } from "@/trpc-server";
+export { type RouterInputs, type RouterOutputs } from "@/trpc-server/api";
 
 /**
  * A wrapper for your app that provides the TRPC context.
