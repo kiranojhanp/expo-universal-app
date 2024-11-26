@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
+import { httpBatchLink, loggerLink } from "@trpc/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import type { AppRouter } from "@/trpc-server";
 import { getUrl, transformer } from "./shared";
@@ -30,15 +30,15 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
         httpBatchLink({
           transformer,
           url: getUrl(),
-          // headers() {
-          //   const headers = new Map<string, string>();
-          //   headers.set("x-trpc-source", "expo-react");
+          headers() {
+            const headers = new Map<string, string>();
+            headers.set("x-trpc-source", "expo-react");
 
-          //   const token = "replace-with-getToken"; //getToken();
-          //   if (token) headers.set("Authorization", `Bearer ${token}`);
+            // const token = "replace-with-getToken"; //getToken();
+            // if (token) headers.set("Authorization", `Bearer ${token}`);
 
-          //   return Object.fromEntries(headers);
-          // },
+            return Object.fromEntries(headers);
+          },
         }),
       ],
     })

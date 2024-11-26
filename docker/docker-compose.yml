@@ -1,0 +1,20 @@
+services:
+  fewa-web-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: fewa-web-app:latest
+    ports:
+      - "8081:8081"
+    environment:
+      EXPO_PUBLIC_API_URL: http://localhost:8081
+      NODE_ENV: production
+      PORT: 8081
+    command: ["bun", "/usr/src/app/node-server.js"]
+    restart: always
+    networks:
+      - fewa-internal-network
+
+networks:
+  fewa-internal-network:
+    driver: bridge
