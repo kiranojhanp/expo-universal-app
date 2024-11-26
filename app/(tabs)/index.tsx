@@ -1,5 +1,7 @@
 import React, { Suspense } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { ThemedText as Text } from "@/components/ThemedText";
+import { ThemedView as View } from "@/components/ThemedView";
 import { Hello } from "@/components/Hello";
 import { api } from "@/trpc-utils/api";
 
@@ -32,7 +34,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "auto",
-    backgroundColor: "white",
   },
   main: {
     flex: 1,
@@ -60,6 +61,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    color: "white",
+    // color: "white",
   },
 });

@@ -1,5 +1,6 @@
 import { api } from "@/trpc-utils/api";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
+import { ThemedText as Text } from "@/components/ThemedText";
 
 export function Hello() {
   const [hello] = api.post.hello.useSuspenseQuery({ text: "World" });
