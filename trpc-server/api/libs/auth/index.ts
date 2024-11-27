@@ -1,4 +1,4 @@
-import { TimeSpan } from "@/libs/shared/datetime";
+import { TimeSpan } from "@/trpc-server/api/libs/shared/datetime";
 
 export const sessionExpiration = new TimeSpan(30, "d");
 export const sessionCookieName = "auth_session";

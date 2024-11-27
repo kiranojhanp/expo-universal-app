@@ -1,12 +1,15 @@
 // import "server-only";
 import crypto from "crypto";
-import id from "@/libs/shared/id";
-import adapter from "@/libs/auth/adapter";
+import id from "@/trpc-server/api/libs/shared/id";
+import adapter from "@/trpc-server/api/libs/auth/adapter";
 import { encodeHexLowerCase } from "@oslojs/encoding";
-import { isWithinExpirationDate } from "@/libs/shared/datetime";
-import { sessionExpiration } from "@/libs/auth";
+import { isWithinExpirationDate } from "@/trpc-server/api/libs/shared/datetime";
+import { sessionExpiration } from "@/trpc-server/api/libs/auth";
 
-import type { AuthSession, AuthUser } from "@/libs/auth/adapter";
+import type {
+  AuthSession,
+  AuthUser,
+} from "@/trpc-server/api/libs/auth/adapter";
 
 const utils = {
   createSession,

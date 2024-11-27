@@ -1,18 +1,21 @@
 // "use server";
 
 import { z } from "zod";
-import id from "@/libs/shared/id";
-import datetime from "@/libs/shared/datetime";
-import utils from "@/libs/auth/utils";
-import adapter from "@/libs/auth/adapter";
-import { TimeSpan } from "@/libs/shared/datetime";
+import id from "@/trpc-server/api/libs/shared/id";
+import datetime from "@/trpc-server/api/libs/shared/datetime";
+import utils from "@/trpc-server/api/libs/auth/utils";
+import adapter from "@/trpc-server/api/libs/auth/adapter";
+import { TimeSpan } from "@/trpc-server/api/libs/shared/datetime";
 import {
   loginSchema,
   resetPasswordSchema,
   signupSchema,
-} from "@/libs/validators/auth";
+} from "@/trpc-server/api/libs/validators/auth";
 
-import type { LoginInput, SignupInput } from "@/libs/validators/auth";
+import type {
+  LoginInput,
+  SignupInput,
+} from "@/trpc-server/api/libs/validators/auth";
 
 export interface ActionResponse<T> {
   errors?: {
