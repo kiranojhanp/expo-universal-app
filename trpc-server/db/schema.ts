@@ -110,6 +110,13 @@ export const postRelations = relations(posts, ({ one }) => ({
   }),
 }));
 
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
 /**
  * Table type definitions
  */
