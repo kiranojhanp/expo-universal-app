@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fewa.app"
     },
     "web": {
       "bundler": "metro",
@@ -42,6 +43,14 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "origin": "https://fewa.app/api"
+      },
+      "eas": {
+        "projectId": "f5d69092-05f3-4e01-99f5-0ecc0ae7fb21"
+      }
     }
   }
 }
