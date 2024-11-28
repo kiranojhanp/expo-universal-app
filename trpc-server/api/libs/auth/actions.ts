@@ -17,6 +17,12 @@ import type {
   SignupInput,
 } from "@/trpc-server/api/libs/validators/auth";
 
+/**
+ * Generic structure for action responses.
+ * @template T - The shape of the form data being validated.
+ * @property {object} [errors] - Details of field or form errors.
+ * @property {boolean} success - Indicates whether the action was successful.
+ */
 export interface ActionResponse<T> {
   errors?: {
     fieldError?: Partial<Record<keyof T, string | undefined>>;
@@ -26,8 +32,19 @@ export interface ActionResponse<T> {
   success: boolean;
 }
 
+/**
+ * Logs in a user by validating their credentials and initiating a session.
+ *
+ * @param {FormData} formData - The login form data containing email and password.
+ * @returns {Promise<ActionResponse<LoginInput>>} - The result of the login attempt.
+ *
+ * @example
+ * const formData = new FormData();
+ * formData.append("email", "user@example.com");
+ * formData.append("password", "password123");
+ * const response = await login(formData);
+ */
 export async function login(
-  _: unknown,
   formData: FormData
 ): Promise<ActionResponse<LoginInput>> {
   const obj = Object.fromEntries(formData.entries());
@@ -72,14 +89,23 @@ export async function login(
     };
   }
 
-  // create session
-  // set cookie
-  // redirect to dashboard
+  // TODO: Implement session creation, cookie setting, and redirection
   return { success: true };
 }
 
+/**
+ * Signs up a new user, validates their data, and initiates email verification.
+ *
+ * @param {FormData} formData - The signup form data containing email and password.
+ * @returns {Promise<ActionResponse<SignupInput>>} - The result of the signup attempt.
+ *
+ * @example
+ * const formData = new FormData();
+ * formData.append("email", "user@example.com");
+ * formData.append("password", "password123");
+ * const response = await signup(formData);
+ */
 export async function signup(
-  _: unknown,
   formData: FormData
 ): Promise<ActionResponse<SignupInput>> {
   const obj = Object.fromEntries(formData.entries());
@@ -142,7 +168,6 @@ export async function resendVerificationEmail(): Promise<ActionResponse<{}>> {
 }
 
 export async function verifyEmail(
-  _: unknown,
   formData: FormData
 ): Promise<ActionResponse<{}>> {
   const code = formData.get("code");
@@ -172,7 +197,6 @@ export async function verifyEmail(
 }
 
 export async function sendPasswordResetLink(
-  _: unknown,
   formData: FormData
 ): Promise<ActionResponse<{}>> {
   const email = formData.get("email");
@@ -215,7 +239,6 @@ export async function sendPasswordResetLink(
 }
 
 export async function resetPassword(
-  _: unknown,
   formData: FormData
 ): Promise<ActionResponse<{}>> {
   const obj = Object.fromEntries(formData.entries());
@@ -258,6 +281,13 @@ export async function resetPassword(
   return { success: true };
 }
 
+/**
+ * Generates a unique email verification code for a user.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ * @param {string} email - The user's email address.
+ * @returns {Promise<string>} - The generated verification code.
+ */
 async function generateEmailVerificationCode(
   userId: string,
   email: string
@@ -273,6 +303,12 @@ async function generateEmailVerificationCode(
   return code;
 }
 
+/**
+ * Generates a password reset token for a user.
+ *
+ * @param {string} userId - The unique identifier of the user.
+ * @returns {Promise<string>} - The generated password reset token.
+ */
 async function generatePasswordResetToken(userId: string): Promise<string> {
   await adapter.deleteUserPasswordResetTokens(userId);
   const tokenId = id.generateId(40);
