@@ -25,4 +25,4 @@ RUN chmod +x /usr/src/app/node-server.js
 
 # Expose the application port
 EXPOSE $PORT
-ENTRYPOINT ["bun", "/usr/src/app/node-server.js"] 
+CMD ["bun", "/usr/src/app/node-server.js"] 

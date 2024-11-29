@@ -47,7 +47,7 @@
     },
     "extra": {
       "router": {
-        "origin": "https://fewa.app/api"
+        "origin": "https://fewa.app"
       },
       "eas": {
         "projectId": "f5d69092-05f3-4e01-99f5-0ecc0ae7fb21"
