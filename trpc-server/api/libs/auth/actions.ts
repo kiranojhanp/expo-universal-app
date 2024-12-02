@@ -224,7 +224,7 @@ export async function sendPasswordResetLink(
     }
 
     const verificationToken = await generatePasswordResetToken(user.id);
-    const verificationLink = `${process.env.EXPO_PUBLIC_API_URL}/reset-password/${verificationToken}`;
+    const verificationLink = `/reset-password/${verificationToken}`;
 
     // send email with verification link
     return { success: true };
