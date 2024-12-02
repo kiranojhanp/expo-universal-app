@@ -19,8 +19,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Cache Docker images
+        id: docker-cache
+        uses: ScribeMD/docker-cache@0.5.0
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles(paths) }}
+
       - name: Build and push Docker image
-        id: build-push
+        if: steps.docker-cache.outputs.cache-hit != 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
