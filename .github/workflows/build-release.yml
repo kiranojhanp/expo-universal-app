@@ -105,9 +105,9 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: true
-          tags:
-            - ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:${{ github.ref_name }}
-            - ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:${{ github.ref_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:latest
           secrets: |
             PORT=${{ secrets.PORT }}
             NODE_ENV=${{ secrets.NODE_ENV }}
