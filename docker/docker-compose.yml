@@ -41,6 +41,7 @@ services:
       - fewa-web-app
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - fewa-internal-network
 
