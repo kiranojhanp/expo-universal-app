@@ -28,7 +28,7 @@
       [
         "expo-router",
         {
-          "origin": "http://168.138.9.189:8081"
+          "origin": "https://fewa.app"
         }
       ],
       [

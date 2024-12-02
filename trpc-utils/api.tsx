@@ -4,7 +4,7 @@ import { httpBatchLink, loggerLink } from "@trpc/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import type { AppRouter } from "@/trpc-server/api";
-import { getUrl, transformer } from "./shared";
+import { getTrpcBaseUrl, transformer } from "./shared";
 
 /**
  * A set of typesafe hooks for consuming your API.
@@ -29,7 +29,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
         }),
         httpBatchLink({
           transformer,
-          url: getUrl(),
+          url: getTrpcBaseUrl(),
           headers() {
             const headers = new Map<string, string>();
             headers.set("x-trpc-source", "expo-react");
