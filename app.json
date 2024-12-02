@@ -28,7 +28,7 @@
       [
         "expo-router",
         {
-          "origin": "https://fewa.app/api"
+          "origin": "http://168.138.9.189:8081"
         }
       ],
       [
@@ -46,9 +46,6 @@
       "reactCompiler": true
     },
     "extra": {
-      "router": {
-        "origin": "https://fewa.app"
-      },
       "eas": {
         "projectId": "f5d69092-05f3-4e01-99f5-0ecc0ae7fb21"
       }
