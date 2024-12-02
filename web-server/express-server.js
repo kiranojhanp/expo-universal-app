@@ -4,6 +4,7 @@ const path = require("path");
 const { createRequestHandler } = require("@expo/server/build/vendor/express");
 
 const express = require("express");
+const cors = require("cors");
 const compression = require("compression");
 const morgan = require("morgan");
 
@@ -15,6 +16,7 @@ app.use(compression());
 
 // http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
 app.disable("x-powered-by");
+app.use(cors());
 
 app.use(
   express.static(CLIENT_BUILD_DIR, {

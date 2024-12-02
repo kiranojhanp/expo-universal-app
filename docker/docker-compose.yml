@@ -31,6 +31,19 @@ services:
     networks:
       - fewa-internal-network
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    volumes:
+      - ../web-server/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - fewa-web-app
+    ports:
+      - "80:80"
+    networks:
+      - fewa-internal-network
+
 networks:
   fewa-internal-network:
     driver: bridge

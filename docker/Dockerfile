@@ -30,7 +30,7 @@ COPY --chown=bun:bun --from=builder /app/dist ./dist
 COPY --chown=bun:bun --from=builder /app/web-server/express-server.js ./express-server.js
 
 # Install runtime-only dependencies
-RUN bun install express@4.21.1 compression@1.7.5 morgan@1.10.0 @expo/server@0.5.0
+RUN bun install express@4.21.1 compression@1.7.5 cors@2.8.5 morgan@1.10.0 @expo/server@0.5.0
 
 # TODO: use bun executable when it is smaller. Currently it's 90MB for Hello World.
 # https://news.ycombinator.com/item?id=35965782 | https://bun.sh/docs/bundler/executables
