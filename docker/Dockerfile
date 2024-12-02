@@ -11,8 +11,10 @@ FROM base AS builder
 WORKDIR /app
 
 # Install only production dependencies
-COPY . .
+COPY package.json bun.lockb .
 RUN bun install --production --frozen-lockfile
+
+COPY . .
 
 # Build the application
 CMD ["bun", "run", "start"]
