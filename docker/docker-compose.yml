@@ -3,7 +3,6 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    image: fewa-web-app:latest
     restart: always
     ports:
       - "8081:8081"
@@ -12,7 +11,7 @@ services:
       EXPO_PUBLIC_API_URL: http://localhost:8081
       NODE_ENV: production
       PORT: 8081
-    command: ["bun", "/usr/src/app/node-server.js"]
+    command: ["bun", "/app/express-server.js"]
     depends_on:
       - database
     networks:

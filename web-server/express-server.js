@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 const path = require("path");
 const { createRequestHandler } = require("@expo/server/build/vendor/express");
 
