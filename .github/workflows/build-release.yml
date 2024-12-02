@@ -89,6 +89,11 @@ jobs:
           file: ./docker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:${{ github.ref_name }} ${{ secrets.DOCKERHUB_USERNAME }}/fewa-web:latest
+          secrets: |
+            PORT=${{ secrets.PORT }}
+            NODE_ENV=${{ secrets.NODE_ENV }}
+            EXPO_PUBLIC_API_URL=${{ secrets.API_URL }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
 
   create-release:
     needs: [build-android, build-ios, build-web]
@@ -112,7 +117,7 @@ jobs:
 
       - name: Generate release description
         id: generate-description
-        run: echo "Release includes Docker image tag: ${{ needs.build-web.outputs.image_tag }}" > description.txt
+        run: echo "Release includes Docker image tag:${{ needs.build-web.outputs.image_tag }}" > description.txt
 
       - name: Create GitHub Release
         id: create_release
