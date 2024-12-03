@@ -29,9 +29,11 @@ tmp/
 .DS_Store
 Thumbs.db
 
-# Build output (this will be copied from the base stage)
-dist/
-
 # Other unnecessary files
 *.log
 *.bak
+
+# Sensative data
+.git
+.gitignore
+Makefile

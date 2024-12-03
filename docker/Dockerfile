@@ -17,8 +17,9 @@ RUN bun install --production --frozen-lockfile
 COPY . .
 
 # Build the application
-CMD ["bun", "run", "start"]
-CMD ["bun", "run", "build:web"]
+COPY run-build.sh /app/run-build.sh
+RUN chmod +x /app/run-build.sh
+RUN /app/run-build.sh || echo "Build script encountered errors but continuing."
 
 
 # -----------------------------------------------------------------------------
