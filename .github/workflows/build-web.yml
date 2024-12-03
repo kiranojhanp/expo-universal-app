@@ -39,6 +39,7 @@ jobs:
           platforms: linux/arm64
           file: ./docker/Dockerfile
           push: true
+          no-cache: true
           tags: |
             ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:${{ github.ref_name }}
             ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:latest
