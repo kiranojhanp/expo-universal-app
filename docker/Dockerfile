@@ -10,9 +10,9 @@ FROM oven/bun:${BUN_BUILDER_VERSION} AS base
 FROM base AS builder
 WORKDIR /app
 
-# Install only production dependencies
+# Install dependencies
 COPY package.json bun.lockb .
-RUN bun install --production --frozen-lockfile
+RUN bun install --frozen-lockfile
 
 COPY . .
 
