@@ -1,0 +1,100 @@
+name: Bump version and release apps
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+env:
+  PORT: ${{ vars.PORT }}
+  NODE_ENV: ${{ vars.NODE_ENV }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME  }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN  }}
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      # Step 2: Bump version and push tag
+      - name: Bump version and push tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@v1.61.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: master
+          DEFAULT_BUMP: patch
+          WITH_V: true
+          PRERELEASE: false
+
+      # Step 3: Check if a new tag was created
+      - name: Check if version was bumped
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        run: echo "New version created: ${{ steps.bump_version.outputs.new_tag }}"
+
+      # Step 4: Set up Bun
+      - name: Set up Bun
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.37
+
+      # Step 5: Install dependencies
+      - name: Install dependencies
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        run: bun install --frozen-lockfile
+
+      # Step 6: Build the web app
+      - name: Build web app
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        run: bun build:web
+
+      # Step 7: Set up Docker QEMU
+      - name: Set up QEMU
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        uses: docker/setup-qemu-action@v3
+
+      # Step 8: Set up Docker Buildx
+      - name: Set up Buildx
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        uses: docker/setup-buildx-action@v3
+
+      # Step 9: Log in to Docker Hub
+      - name: Login to Docker Hub
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 10: Build and push Docker image
+      - name: Build and push Docker image
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          file: ./docker/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:${{ steps.bump_version.outputs.new_tag }}
+            ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:latest
+          cache-from: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:latest
+          cache-to: type=inline
+          secrets: |
+            PORT=${{ env.PORT }}
+            NODE_ENV=${{ env.NODE_ENV }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+
+      
