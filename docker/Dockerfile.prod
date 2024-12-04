@@ -2,7 +2,7 @@ ARG BUN_BUILDER_VERSION=1
 ARG BUN_RUNNER_VERSION=alpine
 
 # Base stage using the official Bun image
-FROM oven/bun:${BUN_BUILDER_VERSION} as base
+FROM oven/bun:${BUN_BUILDER_VERSION} AS base
 
 # -----------------------------------------------------------------------------
 # Stage 1: Build server package
