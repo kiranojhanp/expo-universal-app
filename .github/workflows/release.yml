@@ -33,7 +33,7 @@ jobs:
       # Step 2: Bump version and push tag
       - name: Bump version and push tag
         id: bump_version
-        uses: anothrNick/github-tag-action@v1.61.0
+        uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BRANCH: master
