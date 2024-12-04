@@ -2,7 +2,7 @@ services:
   fewa-web-app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.prod
     restart: always
     ports:
       - "8081:8081"

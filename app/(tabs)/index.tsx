@@ -2,10 +2,11 @@ import React, { Suspense } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText as Text } from "@/components/ThemedText";
 import { ThemedView as View } from "@/components/ThemedView";
-import { Hello } from "@/components/Hello";
 import { api } from "@/trpc-utils/api";
 
 export default function Page() {
+  const { isLoading, data: hello } = api.post.hello.useQuery({ text: "World" });
+
   const utils = api.useUtils();
 
   const handleRefetch = () => {
@@ -16,9 +17,11 @@ export default function Page() {
     <View style={styles.container}>
       <View style={styles.main}>
         <Text style={styles.title}>Expo App Idea Generator</Text>
-        <Suspense fallback={<Text>Loading...</Text>}>
-          <Hello />
-        </Suspense>
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          <Text style={styles.subtitle}>{hello?.greeting}</Text>
+        )}
         <TouchableOpacity style={styles.button} onPress={handleRefetch}>
           <Text style={styles.buttonText}>Refetch</Text>
         </TouchableOpacity>
