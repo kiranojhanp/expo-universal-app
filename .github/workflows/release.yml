@@ -44,7 +44,7 @@ jobs:
       # Step 3: Check if a new tag was created
       - name: Check if version was bumped
         if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
-        run: echo "New version created: ${{ steps.bump_version.outputs.new_tag }}"
+        run: echo "New version created:${{ steps.bump_version.outputs.new_tag }}"
 
   build_web:
     needs: version_bump
@@ -104,5 +104,3 @@ jobs:
             PORT=${{ env.PORT }}
             NODE_ENV=${{ env.NODE_ENV }}
             DATABASE_URL=${{ env.DATABASE_URL }}
-
-      
