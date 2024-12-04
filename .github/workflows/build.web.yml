@@ -2,8 +2,8 @@ name: Build Web App
 
 on:
   push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+-[0-9]+"
+    branches:
+      - master
 
 env:
   PORT: ${{ vars.PORT }}
@@ -20,18 +20,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Cache Bun dependencies
+        id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: ~/.bun/install/cache
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
+          restore-keys: ${{ runner.os }}-bun-
 
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.1.37
 
       - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: bun install --frozen-lockfile
 
       - name: Build expo web app
