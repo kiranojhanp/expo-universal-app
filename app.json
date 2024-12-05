@@ -2,7 +2,7 @@
   "expo": {
     "name": "fewa-universal-app",
     "slug": "fewa-universal-app",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -17,7 +17,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.fewa.app"
+      "package": "com.fewa.app",
+      "versionCode": 3
     },
     "web": {
       "bundler": "metro",
