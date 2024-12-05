@@ -37,8 +37,8 @@ jobs:
         with:
           path: ~/.bun
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-${{ env.NODE_ENV }}
-        restore-keys: |
-          ${{ runner.os }}-bun-
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       # Step 4: Install dependencies
       - name: Install dependencies
