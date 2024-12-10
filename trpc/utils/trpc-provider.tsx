@@ -9,7 +9,7 @@ import { getTrpcBaseUrl, transformer } from "./shared";
 /**
  * A set of typesafe hooks for consuming your API.
  */
-export const api = createTRPCReact<AppRouter>();
+export const trpcApi = createTRPCReact<AppRouter>();
 export { type RouterInputs, type RouterOutputs } from "@/trpc/server/api";
 
 /**
@@ -19,7 +19,7 @@ export { type RouterInputs, type RouterOutputs } from "@/trpc/server/api";
 export function TRPCProvider(props: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
-    api.createClient({
+    trpcApi.createClient({
       links: [
         loggerLink({
           enabled: (opts) =>
@@ -28,7 +28,9 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
           colorMode: "ansi",
         }),
         httpBatchLink({
+          transformer: transformer,
           url: getTrpcBaseUrl(),
+
           headers() {
             const headers = new Map<string, string>();
             headers.set("x-trpc-source", "expo-react");
@@ -44,10 +46,10 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
   );
 
   return (
-    <api.Provider client={trpcClient} queryClient={queryClient}>
+    <trpcApi.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {props.children}
       </QueryClientProvider>
-    </api.Provider>
+    </trpcApi.Provider>
   );
 }
