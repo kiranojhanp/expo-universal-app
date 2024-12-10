@@ -1,0 +1,141 @@
+name: Bump version and release apps
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+env:
+  PORT: ${{ vars.PORT }}
+  NODE_ENV: ${{ vars.NODE_ENV }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME  }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN  }}
+
+jobs:
+  check_expo:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      # Step 2: Set up Bun
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.37
+
+      # Step 3: Cache Bun dependencies
+      - name: Cache Bun dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-${{ env.NODE_ENV }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Step 5: Run Expo Doctor
+      - name: Check expo doctor
+        run: bunx expo-doctor
+
+  version_bump:
+    needs: check_expo
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      new_tag: ${{ steps.bump_version.outputs.new_tag }}
+      old_tag: ${{ steps.bump_version.outputs.old_tag }}
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      # Step 2: Bump version and push tag
+      - name: Bump version and push tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: master
+          DEFAULT_BUMP: patch
+          WITH_V: true
+          PRERELEASE: false
+
+      # Step 3: Check if a new tag was created
+      - name: Check if version was bumped
+        if: steps.bump_version.outputs.new_tag != steps.bump_version.outputs.old_tag
+        run: echo "New version created:${{ steps.bump_version.outputs.new_tag }}"
+
+  build_web:
+    needs: version_bump
+    if: needs.version_bump.outputs.new_tag != needs.version_bump.outputs.old_tag
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      # Step 2: Set up Bun
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.37
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Step 4: Build the web app
+      - name: Build web app
+        run: bun build:web
+
+      # Step 5: Set up Docker QEMU
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # Step 6: Set up Docker Buildx
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 7: Log in to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step 8: Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          file: ./extras/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:${{ needs.version_bump.outputs.new_tag }}
+            ${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:latest
+          cache-from: type=registry,ref=${{ env.DOCKERHUB_USERNAME }}/fewa-web-app:latest
+          cache-to: type=inline
+          secrets: |
+            PORT=${{ env.PORT }}
+            NODE_ENV=${{ env.NODE_ENV }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
