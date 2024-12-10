@@ -11,6 +11,19 @@
     "test": "jest --watchAll",
     "lint": "expo lint"
   },
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "@trpc/client",
+          "@trpc/react-query",
+          "@trpc/server",
+          "eslint-plugin-react-compiler",
+          "superjson"
+        ]
+      }
+    }
+  },
   "jest": {
     "preset": "jest-expo"
   },
