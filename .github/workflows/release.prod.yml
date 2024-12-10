@@ -139,3 +139,57 @@ jobs:
             PORT=${{ env.PORT }}
             NODE_ENV=${{ env.NODE_ENV }}
             DATABASE_URL=${{ env.DATABASE_URL }}
+
+  build_android:
+    needs: version_bump
+    if: needs.version_bump.outputs.new_tag != needs.version_bump.outputs.old_tag
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      # Step 2: Set up Bun
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.1.37
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Step 4: Set up JDK 21
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      # Step 5: Set up Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Step 6: Set up Expo CLI
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          eas-cache: true
+          eas-version: 13.4.2
+          packager: bun
+          patch-watchers: true
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      # Step 7: Build Android app (APK)
+      - name: Build Android app
+        run: eas build --platform android --profile preview --local --output ${{ github.workspace }}/app-release.apk
+
+      # Step 9: Upload android builds as artifact
+      - name: Upload Build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fewa-release
+          path: ${{ github.workspace }}/app-release.apk
