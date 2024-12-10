@@ -39,3 +39,12 @@ app-example
 
 # env files
 .env
+
+# Terraform
+.terraform*
+terraform.tfstate*
+
+# SSH keys
+id_rsa*
+
+resources/.DS_Store
