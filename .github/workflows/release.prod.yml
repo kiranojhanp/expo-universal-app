@@ -158,22 +158,18 @@ jobs:
         with:
           bun-version: 1.1.37
 
-      # Step 3: Install dependencies
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      # Step 4: Set up JDK 21
+      # Step 3: Set up JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: "21"
           distribution: "temurin"
 
-      # Step 5: Set up Android SDK
+      # Step 4: Set up Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # Step 6: Set up Expo CLI
+      # Step 5: Set up Expo CLI
       - name: Setup Expo
         uses: expo/expo-github-action@v8
         with:
@@ -183,13 +179,17 @@ jobs:
           patch-watchers: true
           token: ${{ secrets.EXPO_TOKEN }}
 
-      # Step 7: Build Android app (APK)
+      # Step 6: Install dependencies
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Step 7: Build Android app (AAB)
       - name: Build Android app
-        run: bun build:android --output ${{ github.workspace }}/app-release.apk
+        run: bun build:android --output ${{ github.workspace }}/app-release.aab
 
       # Step 9: Upload android builds as artifact
       - name: Upload Build artifact
         uses: actions/upload-artifact@v4
         with:
           name: fewa-release
-          path: ${{ github.workspace }}/app-release.apk
+          path: ${{ github.workspace }}/app-release.aab
