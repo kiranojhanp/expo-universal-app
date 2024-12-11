@@ -33,7 +33,6 @@ export default function RootLayout() {
   }
 
   return (
-    <StrictMode>
       <TRPCProvider>
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
@@ -45,6 +44,5 @@ export default function RootLayout() {
           <StatusBar style="auto" />
         </ThemeProvider>
       </TRPCProvider>
-    </StrictMode>
   );
 }
