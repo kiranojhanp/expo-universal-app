@@ -1,5 +1,6 @@
 name: Bump version and release apps
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed
