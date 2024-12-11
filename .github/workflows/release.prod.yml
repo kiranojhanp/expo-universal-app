@@ -28,14 +28,14 @@ jobs:
 
       # Step 2: Set up Node
       - name: Setup node
-        uses: actions/setup-node@v4.0.2
+        uses: actions/setup-node@v3
         with:
-          node-version: 22.x
-          cache: 'npm'
+          node-version: 18.x
+          cache: yarn
 
       # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
 
       # Step 4: Run Expo Doctor
       - name: Check expo doctor
@@ -88,18 +88,18 @@ jobs:
 
       # Step 2: Set up Node
       - name: Setup node
-        uses: actions/setup-node@v4.0.2
+        uses: actions/setup-node@v3
         with:
-          node-version: 22.x
-          cache: 'npm'
+          node-version: 18.x
+          cache: yarn
 
       # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
 
       # Step 4: Build the web app
       - name: Build web app
-        run: npm run build:web
+        run: yarn build:web
 
       # Step 5: Set up Docker QEMU
       - name: Set up QEMU
@@ -148,14 +148,14 @@ jobs:
 
       # Step 2: Set up Node
       - name: Setup node
-        uses: actions/setup-node@v4.0.2
+        uses: actions/setup-node@v3
         with:
-          node-version: 22.x
-          cache: 'npm'
+          node-version: 18.x
+          cache: yarn
 
       # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
 
       # Step 4: Set up JDK 21
       - name: Set up JDK 21
@@ -174,13 +174,13 @@ jobs:
         with:
           eas-cache: true
           eas-version: 13.4.2
-          packager: npm
+          packager: yarn
           patch-watchers: true
           token: ${{ secrets.EXPO_TOKEN }}
 
       # Step 7: Build Android app (AAB)
       - name: Build Android app
-        run: npm run build:android --output ${{ github.workspace }}/app-release.aab
+        run: yarn build:android --output ${{ github.workspace }}/app-release.aab
 
       # Step 8: Upload android builds as artifact
       # Publish to any distribution like playstore, diawi, etc. in this step
