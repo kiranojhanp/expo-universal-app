@@ -9,13 +9,16 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "package": "com.fewa.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fewa.app",
+      "versionCode": 3
     },
     "web": {
       "bundler": "metro",
@@ -42,6 +45,14 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "origin": "https://fewa.app"
+      },
+      "eas": {
+        "projectId": "6f4b1a22-514e-4735-85ed-272da4404135"
+      }
     }
   }
 }
