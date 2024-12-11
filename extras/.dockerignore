@@ -1,0 +1,34 @@
+# Ignore files and directories that are not needed in the Docker image
+
+# Development dependencies
+node_modules
+.expo
+
+# Expo-related files
+.expo-shared/
+*.expo.js
+
+# Testing and linting files
+coverage/
+.eslintrc.js
+jest.config.js
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# Git-related files
+.git/
+.gitignore
+
+# Logs and temporary files
+logs/
+tmp/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Other unnecessary files
+*.log
+*.bak
